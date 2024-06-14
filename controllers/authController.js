@@ -51,17 +51,12 @@ const login = async (req, res, next) => {
             return res.status(400).json({ message: 'Email ou senha incorretos' });
         }
 
-        // Store the email in localStorage for later use
-        localStorage.setItem('userEmail', user.email);
-
-        // Registra o horário de login
         await addDoc(collection(db, 'logins'), {
             userId: userDoc.id,
             email: user.email,
             loginTime: Timestamp.now()
         });
 
-        // Log successful login
         console.log('User logged in successfully');
 
         res.status(200).json({ message: 'Login bem-sucedido' });
