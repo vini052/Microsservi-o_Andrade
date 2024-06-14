@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Open+Sans:wght@700&display=swap" rel="stylesheet">
+    <title>Cadastro</title>
+</head>
+<body>
+    <div class="gray-background">
+        <div class="container">
+            <h1>Cadastro</h1>
+            <form id="signupForm">
+                <div class="input-group">
+                    <input type="text" id="firstName" placeholder="Nome" autocomplete="off" required>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="lastName" placeholder="Sobrenome" autocomplete="off" required>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="email" placeholder="Email" autocomplete="off" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Senha" required>
+                </div>
+                <button type="submit">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+    <script src="signup.js" defer></script>
+</body>
+</html>
