@@ -8,7 +8,6 @@ const signup = async (req, res, next) => {
     try {
         const { firstName, lastName, email, password } = req.body;
 
-        // Log the received data
         console.log('Signup data received:', req.body);
 
         const user = new User(firstName, lastName, email, password, false);
@@ -21,7 +20,6 @@ const signup = async (req, res, next) => {
             upgrade: user.upgrade
         });
 
-        // Log successful signup
         console.log('User signed up successfully');
 
         res.status(201).json({ message: 'Cadastro bem sucedido!' });
@@ -37,7 +35,6 @@ const login = async (req, res, next) => {
         const q = query(collection(db, 'usuarios'), where('email', '==', email));
         const querySnapshot = await getDocs(q);
 
-        // Log the received data
         console.log('Login data received:', req.body);
 
         if (querySnapshot.empty) {
@@ -50,6 +47,9 @@ const login = async (req, res, next) => {
         if (password !== user.password) {
             return res.status(400).json({ message: 'Email ou senha incorretos' });
         }
+
+        // Configurar o cookie com o email do usuário
+        res.cookie('userEmail', user.email, { httpOnly: true, secure: true });
 
         await addDoc(collection(db, 'logins'), {
             userId: userDoc.id,

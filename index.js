@@ -2,12 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const authRoutes = require('./routes/auth-routes');
-
+const cookieParser = require('cookie-parser');
 const app = express();
 
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(cors());
+app.use(cookieParser());
 app.use('/api', authRoutes);
 
 const PORT = process.env.PORT || 5000;
