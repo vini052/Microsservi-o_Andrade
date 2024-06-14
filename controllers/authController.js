@@ -1,7 +1,7 @@
 'use strict';
 
 const db = require('../db');
-const { collection, addDoc, getDocs, query, where, Timestamp } = require('firebase/firestore');
+const { collection, addDoc, getDocs, query, where, Timestamp, updateDoc, doc } = require('firebase/firestore');
 const User = require('../models/user');
 
 const signup = async (req, res, next) => {
@@ -51,6 +51,9 @@ const login = async (req, res, next) => {
             return res.status(400).json({ message: 'Email ou senha incorretos' });
         }
 
+        // Store the email in localStorage for later use
+        localStorage.setItem('userEmail', user.email);
+
         // Registra o horário de login
         await addDoc(collection(db, 'logins'), {
             userId: userDoc.id,
@@ -68,7 +71,30 @@ const login = async (req, res, next) => {
     }
 };
 
+const upgradeUser = async (req, res, next) => {
+    try {
+        const { email } = req.params;
+        const q = query(collection(db, 'usuarios'), where('email', '==', email));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            return res.status(404).json({ message: 'Usuário não encontrado' });
+        }
+
+        const userDoc = querySnapshot.docs[0];
+        const userRef = doc(db, 'usuarios', userDoc.id);
+
+        await updateDoc(userRef, { upgrade: true });
+
+        res.status(200).json({ message: 'Usuário atualizado para premium' });
+    } catch (error) {
+        console.error('Error during upgrade:', error);
+        res.status(400).json({ message: error.message });
+    }
+};
+
 module.exports = {
     signup,
-    login
+    login,
+    upgradeUser
 };
