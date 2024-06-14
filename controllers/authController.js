@@ -2,7 +2,6 @@
 
 const db = require('../db');
 const { collection, addDoc, getDocs, query, where, Timestamp } = require('firebase/firestore');
-const bcrypt = require('bcrypt');
 const User = require('../models/user');
 
 const signup = async (req, res, next) => {
@@ -12,9 +11,7 @@ const signup = async (req, res, next) => {
         // Log the received data
         console.log('Signup data received:', req.body);
 
-        // Criptografar senha
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = new User(firstName, lastName, email, hashedPassword, false);
+        const user = new User(firstName, lastName, email, password, false);
 
         await addDoc(collection(db, 'usuarios'), {
             firstName: user.firstName,
@@ -50,8 +47,7 @@ const login = async (req, res, next) => {
         const userDoc = querySnapshot.docs[0];
         const user = userDoc.data();
 
-        const validPassword = await bcrypt.compare(password, user.password);
-        if (!validPassword) {
+        if (password !== user.password) {
             return res.status(400).json({ message: 'Email ou senha incorretos' });
         }
 
