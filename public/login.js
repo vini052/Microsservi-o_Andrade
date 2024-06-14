@@ -18,12 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify(loginData)
             });
 
+            const responseData = await response.json();
             if (response.ok) {
-                alert('Login bem-sucedido');
+                alert(responseData.message);
                 window.location.href = '/home.html'; // Redirecione para a página principal após o login
             } else {
-                const errorData = await response.json();
-                alert(errorData.message);
+                alert(responseData.message);
             }
         } catch (error) {
             console.error('Erro na requisição:', error);
